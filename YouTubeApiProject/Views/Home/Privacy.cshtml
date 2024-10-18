@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "About YouTube";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Link to Google Fonts for Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: white;
+        }
+
+        .page-title {
+            margin-top: 80px;
+            text-align: center;
+            color: red;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: flex; /* Change to flexbox */
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            justify-content: space-between; /* Space between cards */
+        }
+
+        .card {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1 1 30%; /* Allow cards to grow and shrink, setting a base width */
+            min-width: 250px; /* Minimum width for cards */
+            max-width: 300px; /* Maximum width for cards */
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #d9534f;
+        }
+
+       
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="page-title">@ViewData["Title"]</h1>
+
+        <div class="card">
+            <h2>How YouTube Works</h2>
+            <p>YouTube allows users to <span class="highlight">upload</span>, <span class="highlight">share</span>, and <span class="highlight">discover</span> videos, fostering creativity and community engagement.</p>
+        </div>
+
+        <div class="card">
+            <h2>Community Guidelines</h2>
+            <p>Our <span class="highlight">Community Guidelines</span> ensure a safe environment. Users must follow these rules when interacting with content to maintain community standards.</p>
+        </div>
+
+        <div class="card">
+            <h2>Your Privacy Matters</h2>
+            <p>We prioritize your privacy. Manage your settings and learn about our data practices in our <span class="highlight">Privacy Policy</span>.</p>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>

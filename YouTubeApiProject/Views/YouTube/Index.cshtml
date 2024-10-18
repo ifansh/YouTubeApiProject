@@ -1,0 +1,153 @@
+﻿@model List<YouTubeApiProject.Models.YouTubeVideoModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: white; /* Set background to black */
+            color: #fff; /* Set text color to white for better contrast */
+            font-family: Arial, sans-serif;
+            margin-bottom: 80px; /* Space for the footer */
+        }
+
+        h2 {
+            color: #ff0000; /* Set header color to red */
+        }
+
+        .btn-red {
+            background-color: #ff0000; /* Red background */
+            color: white; /* White text */
+            border: none; /* No border */
+        }
+
+            .btn-red:hover {
+                background-color: #e60000; /* Darker red on hover */
+            }
+
+        .video-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background-color: lightgray; /* Set card background to light grey */
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            width: calc(33.333% - 20px); /* Three cards per row */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+            .video-card:hover {
+                transform: scale(1.02);
+            }
+
+            .video-card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .video-card h3 {
+                font-size: 16px;
+                margin: 10px;
+                color: black;
+            }
+
+            .video-card p {
+                margin: 0 10px 10px;
+                font-size: 14px;
+                color: #606060; /* Keep this dark for contrast against light grey */
+            }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .footer {
+            background-color: #f1f1f1;
+            padding: 20px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 class="text-center mt-4">Search YouTube Videos</h2>
+    <form asp-action="Search" method="post" class="text-center mb-4">
+        <input type="text" name="query" placeholder="Search for videos..." class="form-control w-50 d-inline" />
+        <button type="submit" class="btn btn-red">Search</button>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="video-list">
+            @foreach (var video in Model)
+            {
+                <div class="video-card" style="cursor: pointer;" data-video-url="@video.VideoUrl">
+                    <img src="@video.ThumbnailUrl" alt="@video.Title" />
+                    <h3>@video.Title</h3>
+                    <p>@video.Description</p>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Video</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="videoIframe" width="100%" height="315" src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Show video modal when a video card is clicked
+            $('.video-card').on('click', function () {
+                var videoUrl = $(this).data('video-url');
+                var videoId = new URL(videoUrl).searchParams.get('v');
+                $('#videoIframe').attr('src', 'https://www.youtube.com/embed/' + videoId);
+                $('#videoModal').modal('show');
+            });
+
+            // Clear the iframe src when the modal is closed
+            $('#videoModal').on('hidden.bs.modal', function () {
+                $('#videoIframe').attr('src', '');
+            });
+
+            // Select a random video and show it in the modal on page load
+            var videos = @Html.Raw(Json.Serialize(Model)); // Ensure this is properly formatted in your server-side code
+            if (videos.length > 0) {
+                var randomIndex = Math.floor(Math.random() * videos.length);
+                var randomVideoUrl = videos[randomIndex].VideoUrl; // Adjust if property name is different
+                var randomVideoId = new URL(randomVideoUrl).searchParams.get('v');
+                $('#videoIframe').attr('src', 'https://www.youtube.com/embed/' + randomVideoId);
+                $('#videoModal').modal('show');
+            }
+        });
+    </script>
+
+</body>
+</html>
